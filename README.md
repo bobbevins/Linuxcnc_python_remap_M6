@@ -1,1 +1,1 @@
-# Linuxcnc_python_remap_M6
+Linuxcnc Pure Python M6 Remap
