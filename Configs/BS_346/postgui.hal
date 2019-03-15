@@ -1,0 +1,4 @@
+net remote-rapid-to-home halui.mdi-command-00 hm2_5i25.0.7i84.1.3.input-23
+net cycle-start <= hm2_5i25.0.7i84.1.3.input-22 halui.mode.auto halui.program.run
+
+

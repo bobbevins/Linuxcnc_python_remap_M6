@@ -1,0 +1,59 @@
+
+loadrt ilowpass count=1
+addf ilowpass.0 servo-thread
+loadrt mult2 names=mult2Lowpass,mult2rpm
+
+# Absolute position LCD
+net pos-x halui.axis.x.pos-feedback => xhc-hb04.x.pos-absolute
+net pos-y halui.axis.y.pos-feedback => xhc-hb04.y.pos-absolute
+net pos-z halui.axis.z.pos-feedback => xhc-hb04.z.pos-absolute
+#net pos-a halui.axis.3.pos-feedback => xhc-hb04.a.pos-absolute
+
+# Relative position LCD
+net pos-rel-x halui.axis.x.pos-relative => xhc-hb04.x.pos-relative
+net pos-rel-y halui.axis.y.pos-relative => xhc-hb04.y.pos-relative
+net pos-rel-z halui.axis.z.pos-relative => xhc-hb04.z.pos-relative
+
+
+# Jog wheel and axis selection button
+net jog-x axis.x.jog-enable <= xhc-hb04.jog.enable-x
+net jog-y axis.y.jog-enable <= xhc-hb04.jog.enable-y
+net jog-z axis.z.jog-enable <= xhc-hb04.jog.enable-z
+#net jog-speed halui.axis.jog-speed <= halui.max-velocity.value
+net xhcStepUp xhc-hb04.button-step => xhc-hb04.stepsize-up
+
+#Lowpass Filtering for mpg
+addf mult2Lowpass servo-thread
+setp ilowpass.0.scale 1000
+setp ilowpass.0.gain   0.01
+net jog-counts_in    xhc-hb04.jog.counts => ilowpass.0.in
+net jog-counts_out  ilowpass.0.out =>  axis.x.jog-counts axis.y.jog-counts axis.z.jog-counts halui.feed-override.counts halui.spindle-override.counts
+net jog-scale xhc-hb04.jog.scale => mult2Lowpass.in0
+setp mult2Lowpass.in1 0.001
+net  scale_div_1000 mult2Lowpass.out => axis.x.jog-scale axis.y.jog-scale axis.z.jog-scale  #axis.3.jog-scale 
+
+# Wheel for feedrate and spindle
+setp halui.feed-override.scale 0.00001
+net jog-feed halui.feed-override.count-enable <= xhc-hb04.jog.enable-feed-override
+net jog-feed2 halui.feed-override.value => xhc-hb04.feed-override
+
+setp halui.spindle-override.scale 0.00001
+net jog-spindle halui.spindle-override.count-enable <= xhc-hb04.jog.enable-spindle-override
+net jog-spindle2 halui.spindle-override.value => xhc-hb04.spindle-override
+
+#net goto-0 halui.mdi-command-00 xhc-hb04.button-goto-zero
+
+#setp  debounce.0.delay 1500
+net homeButton       xhc-hb04.button-home =>    debounce.0.4.in
+net homeCmd          debounce.0.4.out  => halui.home-all
+
+# X=0, Y=0, Z=0 
+net x0 halui.mdi-command-01 xhc-hb04.button-zero-x
+net y0 halui.mdi-command-02  xhc-hb04.button-zero-y
+net z0 halui.mdi-command-03  xhc-hb04.button-zero-z
+
+
+net stop             halui.program.stop     xhc-hb04.button-stop
+
+
+

@@ -1,0 +1,300 @@
+# Include your custom HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+net machine-is-on hm2_5i25.0.7i71.1.1.output-25 hm2_5i25.0.7i71.1.1.output-26 hm2_5i25.0.7i71.1.1.output-23 hm2_5i25.0.7i84.1.3.output-00 hm2_5i25.0.7i71.1.1.output-29
+
+
+
+#**************************
+#===== TEST SECTION ======
+#**************************
+
+#net spindle-test-up hm2_5i25.0.7i84.1.3.input-28 hm2_5i25.0.7i71.1.1.output-28
+#net spindle-test-up2 hm2_5i25.0.7i84.1.3.input-20 
+
+#**************************
+# === CLASSIC LADDER  ===
+#**************************
+
+net spindle-on-1 classicladder.0.in-01
+
+net motion-sp-start classicladder.0.out-00 => hm2_5i25.0.7i71.1.2.output-18
+net motion-sp-stop classicladder.0.out-01 => hm2_5i25.0.7i71.1.2.output-16
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#  END Classic Ladder 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#***********************
+# === estop signals ===
+#***********************
+
+loadrt estop_latch
+addf estop-latch.0 servo-thread
+net estop-loopout iocontrol.0.emc-enable-in <= estop-latch.0.ok-out
+net estop-loopin iocontrol.0.user-enable-out => estop-latch.0.ok-in
+net estop-reset iocontrol.0.user-request-enable => estop-latch.0.reset
+net remote-estop estop-latch.0.fault-in <=  hm2_5i25.0.7i77.0.0.input-07-not
+
+#%%%%%%%%%%%%%%%%%%%%%%%
+#  END estop signals 
+#%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#************************************
+# === START GREEN LITE LATCH ===
+#************************************
+loadrt oneshot count=2
+addf oneshot.0 servo-thread
+setp oneshot.0.width 1
+setp oneshot.0.retriggerable 0
+setp oneshot.0.rising 1
+net estop-out-gr estop-latch.0.fault-out => oneshot.0.in
+net unlatch-gr <= oneshot.0.out
+net unlatch-gr => hm2_5i25.0.7i71.1.2.output-17
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%
+#  END Green Lite Latch 
+#%%%%%%%%%%%%%%%%%%%%%%%
+
+							
+
+#***********************
+# Toggle Comps
+#***********************
+
+loadrt toggle count=6
+addf toggle.0 servo-thread
+setp toggle.0.debounce 50
+addf toggle.1 servo-thread
+setp toggle.1.debounce 50
+addf toggle.2 servo-thread
+setp toggle.2.debounce 50
+addf toggle.3 servo-thread
+setp toggle.3.debounce 50
+addf toggle.4 servo-thread
+setp toggle.4.debounce 50
+addf toggle.5 servo-thread
+setp toggle.5.debounce 50
+
+#Vaccum Left and Right
+net vaccum-pedal-LH toggle.0.in <= hm2_5i25.0.7i70.1.0.input-11
+net vaccum-output-LH toggle.0.out => hm2_5i25.0.7i71.1.1.output-38
+
+net vaccum-pedal-RH toggle.1.in <= hm2_5i25.0.7i70.1.0.input-12
+net vaccum-output-RH toggle.1.out => hm2_5i25.0.7i71.1.1.output-39
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%
+#END Vaccum Left and Right
+#%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#net select-SP-A toggle.2.in <= hm2_5i25.0.7i70.1.0.input-43 
+#net select-SP-A-out toggle.2.out => hm2_5i25.0.7i77.0.0.output-00
+
+
+#net select-SP-A-out hm2_5i25.0.7i70.1.0.input-43  => hm2_5i25.0.7i77.0.0.output-00
+
+
+#net tool-holder1 toggle.4.in => hm2_5i25.0.7i84.1.3.input-29
+#net tool-holder1-out toggle.4.out => hm2_5i25.0.7i71.1.2.output-34
+
+#%%%%%%%%%%%%%%%%%%%%%%%
+#  END Toggle Comps 
+#%%%%%%%%%%%%%%%%%%%%%%%
+
+#****************************
+# Tool Cone lock and Release
+#****************************
+
+#======================
+#net sp-A-cone-unlock  
+#======================
+
+
+net debounce-spA-in debounce.0.0.in <= hm2_5i25.0.7i70.1.0.input-20
+net spA-button-in debounce.0.0.out => classicladder.0.in-14
+
+#net sp-a-lock classicladder.0.out-14 hm2_5i25.0.7i71.1.2.output-20
+#net sp-a-unlock classicladder.0.out-11 hm2_5i25.0.7i71.1.2.output-19
+
+#======================
+#net sp-B-cone-unlock 
+#======================
+
+net debounce-spB-in debounce.0.1.in <= hm2_5i25.0.7i70.1.0.input-23
+net spB-button-in debounce.0.1.out => classicladder.0.in-15
+
+net sp-b-lock classicladder.0.out-15 hm2_5i25.0.7i71.1.2.output-23
+net sp-b-unlock classicladder.0.out-16 hm2_5i25.0.7i71.1.2.output-22
+
+#======================
+#net sp-C-cone-unlock 
+#======================
+
+net debounce-spC-in debounce.0.2.in <= hm2_5i25.0.7i70.1.0.input-26
+net spC-button-in debounce.0.2.out => classicladder.0.in-16
+
+net sp-c-lock classicladder.0.out-17 hm2_5i25.0.7i71.1.2.output-27
+net sp-c-unlock classicladder.0.out-18 hm2_5i25.0.7i71.1.2.output-25
+
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#  Tool Cone lock and Release
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#***********************
+# Lube Level Low
+#***********************
+
+net lube_is_low hm2_5i25.0.7i70.1.0.input-27
+
+net man_lube_cycle hm2_5i25.0.7i70.1.0.input-29 hm2_5i25.0.7i71.1.1.output-27
+#net man_lube_cycle hm2_5i25.0.7i70.1.0.input-29 hm2_5i25.0.7i71.1.2.output-29
+
+#%%%%%%%%%%%%%%%%%%%%%%%%
+#  END Lube level is low
+#%%%%%%%%%%%%%%%%%%%%%%%%
+
+#***********************
+# Pause-Resume LH RH
+#***********************
+
+
+
+addf and2.0 servo-thread
+addf and2.1 servo-thread
+addf and2.2 servo-thread
+
+
+net RH-gr-lite-right classicladder.0.out-08 => hm2_5i25.0.7i71.1.1.output-33
+net RH-gr-lite-left classicladder.0.out-03 => hm2_5i25.0.7i71.1.1.output-35
+#net RH-safety-sensor classicladder.0.in-02 hm2_5i25.0.7i71.1.2.output-19 => hm2_5i25.0.7i70.1.0.input-10-not 
+net RH-safety-sensor classicladder.0.in-02 => hm2_5i25.0.7i70.1.0.input-10-not 
+net RH-button-left classicladder.0.in-04 => hm2_5i25.0.7i70.1.0.input-05 
+net RH-button-right classicladder.0.in-05 => hm2_5i25.0.7i70.1.0.input-07
+#net A-program-is-running classicladder.0.in-06 => halui.program.is-running
+#net B-mode-auto classicladder.0.in-07 => halui.mode.auto
+#net I8-program-is-paused classicladder.0.in-08 => halui.program.is-paused
+#net Q4-program-resume classicladder.0.out-04 => halui.program.resume
+#net Q9-program-pause classicladder.0.out-09 halui.program.pause
+net LH-gr-lite-right classicladder.0.out-05 => hm2_5i25.0.7i71.1.1.output-32
+net LH-gr-lite-left classicladder.0.out-06 => hm2_5i25.0.7i71.1.1.output-34
+net LH-safety-sensor classicladder.0.in-11 => hm2_5i25.0.7i70.1.0.input-09-not 
+net LH-button-left classicladder.0.in-09 => hm2_5i25.0.7i70.1.0.input-04 
+net LH-button-right classicladder.0.in-10 => hm2_5i25.0.7i70.1.0.input-06
+
+#net safety-sensor-inhibit classicladder.0.in-17 hm2_5i25.0.7i84.1.3.input-22
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%
+#  END Pause-Resume LH RH 
+#%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#***********************
+# TEMP Button Panel
+#***********************
+
+loadrt or2 count=10
+addf or2.0 servo-thread 
+addf or2.1 servo-thread
+addf or2.2 servo-thread
+addf or2.3 servo-thread
+addf or2.4 servo-thread
+addf or2.5 servo-thread
+addf or2.6 servo-thread
+addf or2.7 servo-thread
+addf or2.8 servo-thread
+addf or2.9 servo-thread
+
+#net mag-open-A hm2_5i25.0.7i84.1.3.input-16 or2.0.in0
+#net mag-open-B motion.digital-out-00 or2.0.in1
+#net mag-open or2.0.out => hm2_5i25.0.7i71.1.2.output-38
+
+#net mag-close-A hm2_5i25.0.7i84.1.3.input-17 or2.1.in0
+#net mag-close-B motion.digital-out-01 or2.1.in1
+#net mag-close or2.1.out => hm2_5i25.0.7i71.1.2.output-39
+
+#net spindleA-down-A hm2_5i25.0.7i84.1.3.input-23 or2.2.in0
+#net spindleA-down-B motion.digital-out-05 or2.2.in1
+#net spindleAdrop or2.2.out => hm2_5i25.0.7i71.1.2.output-00
+
+#net spindleA-up-A hm2_5i25.0.7i84.1.3.input-24 or2.3.in0
+#net spindleA-up-B motion.digital-out-08 or2.3.in1
+#net spindleArise or2.3.out => hm2_5i25.0.7i71.1.2.output-04
+
+#net spindleB-down-A hm2_5i25.0.7i84.1.3.input-25 or2.4.in0
+#net spindleB-down-B motion.digital-out-06 or2.4.in1
+#net spindleBdrop or2.4.out => hm2_5i25.0.7i71.1.2.output-01
+
+#net spindleB-up-A hm2_5i25.0.7i84.1.3.input-26 or2.5.in0
+#net spindleB-up-B motion.digital-out-09 or2.5.in1
+#net spindleBrise or2.5.out => hm2_5i25.0.7i71.1.2.output-05
+
+#net spindleC-down-A hm2_5i25.0.7i84.1.3.input-27 or2.6.in0
+#net spindleC-down-B motion.digital-out-07 or2.6.in1
+#net spindleCdrop or2.6.out => hm2_5i25.0.7i71.1.2.output-02
+
+#net spindleC-up-A hm2_5i25.0.7i84.1.3.input-28 or2.7.in0
+#net spindleC-up-B motion.digital-out-10 or2.7.in1
+#net spindleCrise or2.7.out => hm2_5i25.0.7i71.1.2.output-06
+
+#net spindleALock-A classicladder.0.out-14 or2.8.in0
+#net spindleALock-B motion.digital-out-15 or2.8.in1
+#net spindleAlock or2.8.out => hm2_5i25.0.7i71.1.2.output-20
+
+#net spindleArelease-A classicladder.0.out-11 or2.9.in0
+#net spindleArelease-B motion.digital-out-14 or2.9.in1
+#net spindleArelease or2.9.out => hm2_5i25.0.7i71.1.2.output-19
+
+
+
+
+
+#net test-mid-stops hm2_5i25.0.7i84.1.3.input-20 hm2_5i25.0.7i71.1.1.output-40
+#net test-side-stops hm2_5i25.0.7i84.1.3.input-21 hm2_5i25.0.7i71.1.1.output-47
+
+
+
+#net button3-tool-holder-1-up hm2_5i25.0.7i84.1.3.input-18 hm2_5i25.0.7i71.1.2.output-32 ATC 1 up
+#net button4-tool-holder-2-up hm2_5i25.0.7i84.1.3.input-19 hm2_5i25.0.7i71.1.2.output-33 ATC 2 up
+#net button5-tool-holder-3-up hm2_5i25.0.7i84.1.3.input-20 hm2_5i25.0.7i71.1.2.output-34 ATC 3 up
+
+#net LH-row1-front-stop hm2_5i25.0.7i84.1.3.input-18 hm2_5i25.0.7i71.1.1.output-36
+#net RH-row1-front-stop hm2_5i25.0.7i84.1.3.input-19 hm2_5i25.0.7i71.1.1.output-37 hm2_5i25.0.7i71.1.1.output-41
+
+net left-back-stops-in toggle.3.in <= hm2_5i25.0.7i77.0.0.input-00
+net left-back-stops-out toggle.3.out hm2_5i25.0.7i71.1.1.output-37
+
+#net LH-row2-front-stop hm2_5i25.0.7i84.1.3.input-20 hm2_5i25.0.7i71.1.1.output-40
+#net RH-row2-front-stop hm2_5i25.0.7i84.1.3.input-21 hm2_5i25.0.7i71.1.1.output-41
+
+#net LH-central-stop hm2_5i25.0.7i84.1.3.input-22 hm2_5i25.0.7i71.1.1.output-42
+#net RH-central-stop hm2_5i25.0.7i84.1.3.input-29 hm2_5i25.0.7i71.1.1.output-43
+
+
+#net slot-A-down hm2_5i25.0.7i84.1.3.input-23 hm2_5i25.0.7i71.1.2.output-00
+#net slot-A-up hm2_5i25.0.7i84.1.3.input-24 hm2_5i25.0.7i71.1.2.output-04
+
+#net slot-B-down hm2_5i25.0.7i84.1.3.input-25 hm2_5i25.0.7i71.1.2.output-01
+#net slot-B-up hm2_5i25.0.7i84.1.3.input-26 hm2_5i25.0.7i71.1.2.output-05
+
+#net slot-C-down hm2_5i25.0.7i84.1.3.input-27 hm2_5i25.0.7i71.1.2.output-02
+#net slot-C-up hm2_5i25.0.7i84.1.3.input-28 hm2_5i25.0.7i71.1.2.output-06
+
+
+#net Test-out hm2_5i25.0.7i84.1.3.input-29 hm2_5i25.0.7i71.1.1.output-42 hm2_5i25.0.7i71.1.1.output-43 hm2_5i25.0.7i71.1.1.output-47
+
+net stops-back_left toggle.5.in <= hm2_5i25.0.7i84.1.3.input-29
+net stops-back_left_1 toggle.5.out => hm2_5i25.0.7i71.1.1.output-42 hm2_5i25.0.7i71.1.1.output-43 hm2_5i25.0.7i71.1.1.output-47 hm2_5i25.0.7i71.1.1.output-41
+
+#hm2_5i25.0.7i71.1.1.output-36
+
+
+
+
+
+

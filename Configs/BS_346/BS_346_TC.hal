@@ -1,0 +1,130 @@
+# Machine type is : Biesse Rover 346
+#-----------------------------------------------
+# HAL file for the tool changer
+# Created on Mar 19 2017 13:51:14
+# Created by XML to HAL converter in python: CreateHALfromXML.py
+#-----------------------------------------------
+net spindleBreleased hm2_5i25.0.7i70.1.0.input-22 motion.digital-in-00
+net spindleCreleased hm2_5i25.0.7i70.1.0.input-25 motion.digital-in-01
+net coveropened hm2_5i25.0.7i70.1.0.input-30 motion.digital-in-02
+net coverclosed hm2_5i25.0.7i70.1.0.input-31 motion.digital-in-03
+net pocket1hastool hm2_5i25.0.7i70.1.0.input-38 motion.digital-in-04
+net pocket2hastool hm2_5i25.0.7i70.1.0.input-39 motion.digital-in-05
+net pocket3hastool hm2_5i25.0.7i70.1.0.input-40 motion.digital-in-06
+net spindleALLup hm2_5i25.0.7i70.1.0.input-13 motion.digital-in-07
+net spindleHasStopped hm2_5i25.0.7i70.1.0.input-14 motion.digital-in-08
+net spindleAdown hm2_5i25.0.7i70.1.0.input-15 motion.digital-in-09
+net spindleBdown hm2_5i25.0.7i70.1.0.input-16 motion.digital-in-10
+net spindleCdown hm2_5i25.0.7i70.1.0.input-17 motion.digital-in-11
+net spindleAhastool hm2_5i25.0.7i70.1.0.input-18 motion.digital-in-12
+net spindleAreleased hm2_5i25.0.7i70.1.0.input-19 motion.digital-in-13
+net spindleBhastool hm2_5i25.0.7i70.1.0.input-21 motion.digital-in-14
+net spindleChastool hm2_5i25.0.7i70.1.0.input-24 motion.digital-in-15
+net pocketsALLdown hm2_5i25.0.7i70.1.0.input-32 motion.digital-in-16
+net pocket1up hm2_5i25.0.7i70.1.0.input-33 motion.digital-in-17
+net pocket2up hm2_5i25.0.7i70.1.0.input-34 motion.digital-in-18
+net pocket3up hm2_5i25.0.7i70.1.0.input-35 motion.digital-in-19
+
+
+
+
+
+net opencover-A hm2_5i25.0.7i84.1.3.input-17 or2.0.in0 
+net opencover-B motion.digital-out-00 or2.0.in1 
+net opencover or2.0.out => hm2_5i25.0.7i71.1.2.output-38
+
+
+net closecover-A hm2_5i25.0.7i84.1.3.input-16 or2.1.in0 
+net closecover-B motion.digital-out-01 or2.1.in1 
+net closecover or2.1.out => hm2_5i25.0.7i71.1.2.output-39
+
+
+net spindleAdrop-A hm2_5i25.0.7i84.1.3.input-28 or2.2.in0 
+net spindleAdrop-B motion.digital-out-02 or2.2.in1 
+net spindleAdrop or2.2.out => hm2_5i25.0.7i71.1.2.output-00
+
+
+#net spindleBdrop-A hm2_5i25.0.7i84.1.3.input-25 or2.3.in0 
+#net spindleBdrop-B motion.digital-out-03 or2.3.in1 
+#net spindleBdrop or2.3.out => hm2_5i25.0.7i71.1.2.output-01
+
+
+#net spindleCdrop-A hm2_5i25.0.7i84.1.3.input-27 or2.4.in0 
+#net spindleCdrop-B motion.digital-out-04 or2.4.in1 
+#net spindleCdrop or2.4.out => hm2_5i25.0.7i71.1.2.output-02
+
+
+net spindleArise-A hm2_5i25.0.7i84.1.3.input-20 or2.5.in0 
+net spindleArise-B motion.digital-out-05 or2.5.in1 
+net spindleArise or2.5.out => hm2_5i25.0.7i71.1.2.output-04
+
+
+#net spindleBrise-A hm2_5i25.0.7i84.1.3.input-26 or2.6.in0 
+#net spindleBrise-B motion.digital-out-06 or2.6.in1 
+#net spindleBrise or2.6.out => hm2_5i25.0.7i71.1.2.output-05
+
+
+#net spindleCrise-A hm2_5i25.0.7i84.1.3.input-28 or2.7.in0 
+#net spindleCrise-B motion.digital-out-07 or2.7.in1 
+#net spindleCrise or2.7.out => hm2_5i25.0.7i71.1.2.output-06
+
+
+net spindleArelease-A classicladder.0.out-11 or2.8.in0 
+net spindleArelease-B motion.digital-out-08 or2.8.in1 
+net spindleArelease or2.8.out => hm2_5i25.0.7i71.1.2.output-19
+
+
+net spindleAlock-A classicladder.0.out-14 or2.9.in0 
+net spindleAlock-B motion.digital-out-09 or2.9.in1 
+net spindleAlock or2.9.out => hm2_5i25.0.7i71.1.2.output-20
+
+net raisepocket1 hm2_5i25.0.7i71.1.2.output-32 motion.digital-out-10
+net raisepocket2 hm2_5i25.0.7i71.1.2.output-33 motion.digital-out-11
+net raisepocket3 hm2_5i25.0.7i71.1.2.output-34 motion.digital-out-12
+net spindleAenergise hm2_5i25.0.7i71.1.2.output-10 motion.digital-out-13
+net spindleBenergise hm2_5i25.0.7i71.1.2.output-11 motion.digital-out-14
+net spindleCenergise hm2_5i25.0.7i71.1.2.output-12 motion.digital-out-15
+net spindle1drop hm2_5i25.0.7i77.0.0.output-00 motion.digital-out-16
+net spindle2drop hm2_5i25.0.7i77.0.0.output-01 motion.digital-out-17
+net spindle3drop hm2_5i25.0.7i77.0.0.output-02 motion.digital-out-18
+net spindle4drop hm2_5i25.0.7i77.0.0.output-03 motion.digital-out-19
+net spindle5drop hm2_5i25.0.7i77.0.0.output-04 motion.digital-out-20
+net spindle6drop hm2_5i25.0.7i77.0.0.output-05 motion.digital-out-21
+net spindle7drop hm2_5i25.0.7i77.0.0.output-06 motion.digital-out-22
+net spindle8drop hm2_5i25.0.7i77.0.0.output-07 motion.digital-out-23
+net spindle9drop hm2_5i25.0.7i77.0.0.output-08 motion.digital-out-24
+net spindle10drop hm2_5i25.0.7i77.0.0.output-09 motion.digital-out-25
+net spindle11drop hm2_5i25.0.7i77.0.0.output-10 motion.digital-out-26
+net spindle12drop hm2_5i25.0.7i77.0.0.output-11 motion.digital-out-27
+net spindle13drop hm2_5i25.0.7i77.0.0.output-12 motion.digital-out-28
+net spindle14drop hm2_5i25.0.7i77.0.0.output-13 motion.digital-out-29
+net spindle15drop hm2_5i25.0.7i77.0.0.output-14 motion.digital-out-30
+net spindle16drop hm2_5i25.0.7i77.0.0.output-15 motion.digital-out-31
+net spindle17drop hm2_5i25.0.7i71.1.1.output-00 motion.digital-out-32
+net spindle18drop hm2_5i25.0.7i71.1.1.output-01 motion.digital-out-33
+net spindle19drop hm2_5i25.0.7i71.1.1.output-02 motion.digital-out-34
+net spindle20drop hm2_5i25.0.7i71.1.1.output-03 motion.digital-out-35
+net spindle21drop hm2_5i25.0.7i71.1.1.output-04 motion.digital-out-36
+net spindle22drop hm2_5i25.0.7i71.1.1.output-05 motion.digital-out-37
+net spindle23drop hm2_5i25.0.7i71.1.1.output-06 motion.digital-out-38
+net spindle24drop hm2_5i25.0.7i71.1.1.output-07 motion.digital-out-39
+net spindle25drop hm2_5i25.0.7i71.1.1.output-08 motion.digital-out-40
+net spindle26drop hm2_5i25.0.7i71.1.1.output-09 motion.digital-out-41
+net spindle27drop hm2_5i25.0.7i71.1.1.output-10 motion.digital-out-42
+net spindle28drop hm2_5i25.0.7i71.1.1.output-11 motion.digital-out-43
+net spindle29drop hm2_5i25.0.7i71.1.1.output-12 motion.digital-out-44
+net spindle30drop hm2_5i25.0.7i71.1.1.output-13 motion.digital-out-45
+net spindle31drop hm2_5i25.0.7i71.1.1.output-14 motion.digital-out-46
+net spindle32drop hm2_5i25.0.7i71.1.1.output-15 motion.digital-out-47
+net spindle33drop hm2_5i25.0.7i71.1.1.output-16 motion.digital-out-48
+net spindle1and2drop hm2_5i25.0.7i71.1.1.output-17 motion.digital-out-49
+net spindle3and4drop hm2_5i25.0.7i71.1.1.output-18 motion.digital-out-50
+net spindle5and6drop hm2_5i25.0.7i71.1.1.output-19 motion.digital-out-51
+net spindle7and8drop hm2_5i25.0.7i71.1.1.output-20 motion.digital-out-52
+net spindle9and10drop hm2_5i25.0.7i71.1.1.output-21 motion.digital-out-53
+net spindledrill1 hm2_5i25.0.7i71.1.1.output-28 motion.digital-out-54
+
+
+
+
+# Signals:78, Good:74, IN:20, OUT:58

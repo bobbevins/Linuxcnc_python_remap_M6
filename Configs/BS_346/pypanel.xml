@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<pyvcp>
+<!-- 
+Include your PyVCP panel here.
+The contents of this file will not be overwritten when you run stepconf again.
+-->
+<hbox>
+	<relief>RAISED</relief>
+	<bd>3</bd>
+	<meter><halpin>"spindle-speed1"</halpin>
+		<text>"Spindle"</text>
+		<subtext>"RPM"</subtext>
+		<size>150</size>
+		<min_>0</min_>
+		<max_>6000</max_>
+		<majorscale>1000</majorscale>
+		<minorscale>100</minorscale>
+		<region1>0,3000,"green"</region1>
+		<region2>3000,20000,"yellow"</region2>
+		<region3>20000,24000,"red"</region3>
+	</meter>
+</hbox>
+
+<hbox>
+	<number>
+		<halpin>"spindle-vel-cmd-rpm"</halpin>
+		<font>("Helvetica",16)</font>
+		<format>"4.1f"</format>
+	</number>
+</hbox>
+
+<hbox>
+	<button>
+		<halpin>"but-work-zero"</halpin>
+		<text>" ZERO AXIS "</text>
+		<bd>3</bd>
+	</button>
+</hbox>
+	<vbox>
+		<label>
+			<font>("Helvetica",8)</font>
+		</label>
+	</vbox>
+
+<!-- Cycle time -->
+
+-<hbox>
+	<label>
+		<text>"Cycle Times"</text>
+		<font>("Helvetica",14)</font>
+	</label>
+</hbox>
+<hbox>
+	<label>
+		<text>"Current:"</text>
+		<font>("Helvetica",12)</font>
+	</label>
+
+	<u32>
+		<halpin>"time-hours"</halpin>
+		<font>("Helvetica",12)</font>
+		<format>"2d"</format>
+	</u32>
+	<label>
+		<text>":"</text>
+		<font>("Helvetica",12)</font>
+	</label>
+	<u32>
+		<halpin>"time-minutes"</halpin>
+		<font>("Helvetica",12)</font>
+		<format>"2d"</format>
+	</u32>
+	<label>
+		<text>":"</text>
+		<font>("Helvetica",12)</font>
+		</label>
+	<u32>
+		<halpin>"time-seconds"</halpin>
+		<font>("Helvetica",12)</font>
+		<format>"2d"</format>
+	</u32>
+</hbox>
+<hbox>
+	<label>
+		<text>"Overall:"</text>
+		<font>("Helvetica",12)</font>
+	</label>
+	<u32>
+		<halpin>"full-time-hours"</halpin>
+		<font>("Helvetica",12)</font>
+		<format>"2d"</format>
+	</u32>
+	<label>
+		<text>":"</text>
+		<font>("Helvetica",12)</font>
+	</label>
+	<u32>
+		<halpin>"full-time-minutes"</halpin>
+		<font>("Helvetica",12)</font>
+		<format>"2d"</format>
+	</u32>
+	<label>
+		<text>":"</text>
+		<font>("Helvetica",12)</font>
+	</label>
+	<u32>
+		<halpin>"full-time-seconds"</halpin>
+		<font>("Helvetica",12)</font>
+		<format>"2d"</format>
+	</u32>
+</hbox>
+<hbox>
+	<label>
+		<text>"--------------------------------"</text>
+		<font>("Helvetica",10)</font>
+	</label>
+</hbox>
+<hbox>
+	<label>
+		<text> "Tool: " </text>
+		<font>("Helvetica",14)</font>
+	</label>
+	<u32>
+		<halpin>"tool-number"</halpin>
+		<font>("Helvetica",14)</font>
+		<format>"2d"</format>
+		<width>2</width>
+	</u32>
+</hbox>
+<hbox>
+	<label>
+		<text> "Feed: " </text>
+		<font>("Helvetica",14)</font>
+	</label>
+	<number>
+		<halpin>"vel-feed"</halpin>
+		<font>("Helvetica",14)</font>
+		<format>"4.4f"</format>
+		<width>8</width>
+	</number>
+</hbox>
+<hbox>
+	<label>
+		<text> "Offset: " </text>
+		<font>("Helvetica",14)</font>
+	</label>
+	<number>
+		<halpin>"tool-offset"</halpin>
+		<font>("Helvetica",14)</font>
+		<format>"4.4f"</format>
+		<width>8</width>
+	</number>
+</hbox>
+<hbox>
+	<label>
+		<text> "To Go: " </text>
+		<font>("Helvetica",14)</font>
+	</label>
+	<number>
+		<halpin>"distance-to-go"</halpin>
+		<font>("Helvetica",14)</font>
+		<format>"4.4f"</format>
+		<width>8</width>
+	</number>
+</hbox>
+<hbox>
+	<label>
+		<text>"--------------------------------"</text>
+		<font>("Helvetica",10)</font>
+	</label>
+</hbox>
+<!-- START TOUCHOFF CODE -->
+<hbox>
+	<button>
+		<halpin>"x-touchoff"</halpin>
+		<text>"Set G54\n X Position"</text>
+		<font>("Helvetica",8)</font>
+		<bd>3</bd>
+	</button>
+	<button>
+		<halpin>"y-touchoff"</halpin>
+		<text>"Set G54\n Y Position"</text>
+		<font>("Helvetica",8)</font>
+		<bd>3</bd>
+	</button>
+</hbox>
+<hbox>
+	<button>
+		<halpin>"z-touchoff"</halpin>
+		<text>"Set G54\n Z Position"</text>
+		<font>("Helvetica",8)</font>
+		<bd>3</bd>
+	</button>
+</hbox>
+</pyvcp>
