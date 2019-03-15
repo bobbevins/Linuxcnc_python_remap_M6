@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Michel Trahan
 #from linuxcnc import INTERP_EXECUTE_FINISH, INTERP_OK
 from stdglue import init_stdglue 
 import remap
