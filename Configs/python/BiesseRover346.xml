@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinuxCNC type="Biesse Rover 346">
+	<Current> <!-- NO USED FOR NOW -->
+		<Spindle id="A" tool=""/>		<!-- should be the last one used -->
+		<Drill id="1" tool=""/> 			<!-- could have multiple drills down at the same time ? -->
+		<Drill id="17" tool=""/>
+		<Drill id="27" tool=""/>
+		<SideDrill id="7" tool=""/> 		<!-- always in pairs for the side drills -->
+		<SideDrill id="8" tool=""/>
+	</Current>
+	<Feed speed="200"/> <!-- in IPM 200 is about 3.33 inches per second -->
+	<Delays> <!-- val in seconds --> 
+		<Delay name="pulseDelay" 					val="0.5"/>
+		<Delay name="energiseSpindle"				val="0.5"/>
+		<Delay name="coveropened"					val="5"/>
+		<Delay name="coverclosed"					val="5"/>
+		<Delay name="spindlehasstopped"			val="25"/>
+		<Delay name="spindleALLup"					val="2"/>
+		<Delay name="spindlehastool"				val="1"/>
+		<Delay name="spindlereleased"				val="1"/>
+		<Delay name="spindledown"					val="1"/>
+		<Delay name="pocketsALLdown"			val="3"/>
+		<Delay name="pocketup"						val="2"/>
+		<Delay name="movetoFRONT"				val="2"/>
+		<Delay name="moveIN"							val="2"/>
+		<Delay name="moveOUT"						val="2"/>
+		<Delay name="movetoTOP"					val="2"/>
+	</Delays>
+	<Pockets> <!-- Pocket id x has tool Front and Top position x, y, z are in machine position -->
+		<Pocket id="1" hasTool="No" >
+            <Front 	x="15.375" 	y="-25.57" 	z="-1.788"/>
+            <Top 	x="11.825" 	y="-25.57" 	z="-1.788"/>
+        </Pocket>
+		<Pocket id="2" hasTool="Yes" >
+            <Front 	x="15.375" 	y="-33.527" 	z="-1.840"/>
+            <Top 	x="11.900" 	y="-33.527" 	z="-1.840"/>
+        </Pocket>
+		<Pocket id="3" hasTool="Yes" >
+            <Front 	x="15.375" 	y="-41.545" 	z="-1.790"/>
+            <Top 	x="11.825" 	y="-41.545" 	z="-1.790"/>
+        </Pocket>
+	</Pockets>
+	<Signals> 
+		<!-- name is the key, index the info we need, dir is the IN or OUT direction of the signal  ... the rest is informative only to be sure we are talking about the same thing -->
+		<!-- many signals ...  -->
+		<!-- INPUTS -->
+		<Signal name="spindleBreleased" 		index="00" dir="IN" desc="Sensor Tool Cone on Slot B Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-22" />
+		<Signal name="spindleCreleased" 		index="01" dir="IN" desc="Sensor Tool Cone on Slot C Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-25" />
+
+		<Signal name="coveropened" 			index="02" dir="IN" desc="Tool Magazine Cover Open" 					mesaOUT="hm2_5i25.0.7i70.1.0.input-30" />
+		<Signal name="coverclosed" 				index="03" dir="IN" desc="Tool Magazine Cover Closed" 					mesaOUT="hm2_5i25.0.7i70.1.0.input-31" />
+		
+		<Signal name="pocket1hastool" 		index="04" dir="IN" desc="Presence of tool Cone at Tool Holder 1" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-38" />
+		<Signal name="pocket2hastool" 		index="05" dir="IN" desc="Presence of tool Cone at Tool Holder 2" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-39" />
+		<Signal name="pocket3hastool" 		index="06" dir="IN" desc="Presence of tool Cone at Tool Holder 3" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-40" />
+		
+		<Signal name="spindleALLup"			index="07" dir="IN" desc="Spindle Sensor Slots A-C UP" 				mesaOUT="hm2_5i25.0.7i70.1.0.input-13" />
+		<Signal name="spindleHasStopped" 	index="08" dir="IN" desc="Signal from Inverter – Motor Has Stopped" mesaOUT="hm2_5i25.0.7i70.1.0.input-14" />
+		<Signal name="spindleAdown" 			index="09" dir="IN" desc="Sensor Slot A down" 								mesaOUT="hm2_5i25.0.7i70.1.0.input-15" />
+		<Signal name="spindleBdown" 			index="10" dir="IN" desc="Sensor Slot B down" 								mesaOUT="hm2_5i25.0.7i70.1.0.input-16" />
+		<Signal name="spindleCdown" 			index="11" dir="IN" desc="Sensor Slot C down" 								mesaOUT="hm2_5i25.0.7i70.1.0.input-17" />
+		<Signal name="spindleAhastool" 		index="12" dir="IN" desc="Sensor Tool Cone A Locked and Present" mesaOUT="hm2_5i25.0.7i70.1.0.input-18" />
+		<Signal name="spindleAreleased" 		index="13" dir="IN" desc="Sensor Tool Cone on Slot A Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-19" />
+
+		<Signal name="spindleBhastool" 		index="14" dir="IN" desc="Sensor Tool Cone B Locked and Present" mesaOUT="hm2_5i25.0.7i70.1.0.input-21" />
+
+		<Signal name="spindleChastool" 		index="15" dir="IN" desc="Sensor Tool Cone C Locked and Present" mesaOUT="hm2_5i25.0.7i70.1.0.input-24" />
+
+		<Signal name="pocketsALLdown" 		index="16" dir="IN" desc="Sensor Tool Cone on Slot C Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-32" />
+		<Signal name="pocket1up" 				index="17" dir="IN" desc="Sensor Tool Cone on Slot C Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-33" />
+		<Signal name="pocket2up" 				index="18" dir="IN" desc="Sensor Tool Cone on Slot C Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-34" />
+		<Signal name="pocket3up" 				index="19" dir="IN" desc="Sensor Tool Cone on Slot C Released" 	mesaOUT="hm2_5i25.0.7i70.1.0.input-35" />
+
+		<!-- REMOVED OUTPUTS -->
+		<Signal name="spindleBrelease" index="" dir="OUT" desc="EL Valve Release Tool-Holder Cone slot B" 		mesaOUT="hm2_5i25.0.7i71.1.2.output-21" />
+		<Signal name="spindleBlock" 	index="" dir="OUT" desc="EL Valve Lock Tool Holder Cond slot B" 			mesaOUT="hm2_5i25.0.7i71.1.2.output-22" />
+		<Signal name="spindleCrelease" index="" dir="OUT" desc="EL Valve Release Tool-Holder Cone slot C" 		mesaOUT="hm2_5i25.0.7i71.1.2.output-24" />
+		<Signal name="spindleClock" 	index="" dir="OUT" desc="EL Valve Lock Tool Holder Cond slot C" 			mesaOUT="hm2_5i25.0.7i71.1.2.output-25" />
+
+		<!-- NORMAL OUTPUTS -->
+		<Signal name="raisepocket1" 	index="10" dir="OUT" desc="EL Valve for lifting Tool Holder Position 1" 		mesaOUT="hm2_5i25.0.7i71.1.2.output-32" />
+		<Signal name="raisepocket2" 	index="11" dir="OUT" desc="EL Valve for lifting Tool Holder Position 2" 		mesaOUT="hm2_5i25.0.7i71.1.2.output-33" />
+		<Signal name="raisepocket3" 	index="12" dir="OUT" desc="EL Valve for lifting Tool Holder Position 3" 		mesaOUT="hm2_5i25.0.7i71.1.2.output-34" />		
+
+		<Signal name="spindleAenergise" index="13" dir="OUT" desc="Select Spindle A" 										mesaOUT="hm2_5i25.0.7i71.1.2.output-10" />
+		<Signal name="spindleBenergise" index="14" dir="OUT" desc="Select Spindle B" 										mesaOUT="hm2_5i25.0.7i71.1.2.output-11" />
+		<Signal name="spindleCenergise" index="15" dir="OUT" desc="Select Spindle C" 										mesaOUT="hm2_5i25.0.7i71.1.2.output-12" />
+		
+		<Signal name="drillSpindleEnergise" 	index="54" dir="OUT" desc="Select Drills" 										mesaOUT="hm2_5i25.0.7i71.1.1.output-28" />		
+
+		<Signal name="spindle1drop" 	index="16" dir="OUT" desc="EL Valve decent of Spindle 1" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-00" />
+		<Signal name="spindle2drop" 	index="17" dir="OUT" desc="EL Valve decent of Spindle 2" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-01" />
+		<Signal name="spindle3drop" 	index="18" dir="OUT" desc="EL Valve decent of Spindle 3" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-02" />
+		<Signal name="spindle4drop" 	index="19" dir="OUT" desc="EL Valve decent of Spindle 4" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-03" />
+		<Signal name="spindle5drop" 	index="20" dir="OUT" desc="EL Valve decent of Spindle 5" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-04" />
+		<Signal name="spindle6drop" 	index="21" dir="OUT" desc="EL Valve decent of Spindle 6" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-05" />
+		<Signal name="spindle7drop" 	index="22" dir="OUT" desc="EL Valve decent of Spindle 7" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-06" />
+		<Signal name="spindle8drop" 	index="23" dir="OUT" desc="EL Valve decent of Spindle 8" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-07" />
+		<Signal name="spindle9drop" 	index="24" dir="OUT" desc="EL Valve decent of Spindle 9" 						mesaOUT="hm2_5i25.0.7i77.0.0.output-08" />
+		<Signal name="spindle10drop" 	index="25" dir="OUT" desc="EL Valve decent of Spindle 10" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-09" />
+		<Signal name="spindle11drop" 	index="26" dir="OUT" desc="EL Valve decent of Spindle 11" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-10" />
+		<Signal name="spindle12drop" 	index="27" dir="OUT" desc="EL Valve decent of Spindle 12" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-11" />
+		<Signal name="spindle13drop" 	index="28" dir="OUT" desc="EL Valve decent of Spindle 13" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-12" />
+		<Signal name="spindle14drop" 	index="29" dir="OUT" desc="EL Valve decent of Spindle 14" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-13" />
+		<Signal name="spindle15drop" 	index="30" dir="OUT" desc="EL Valve decent of Spindle 15" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-14" />
+		<Signal name="spindle16drop" 	index="31" dir="OUT" desc="EL Valve decent of Spindle 16" 					mesaOUT="hm2_5i25.0.7i77.0.0.output-15" />
+
+		<Signal name="spindle17drop" 	index="32" dir="OUT" desc="EL Valve decent of Spindle 17" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-00" />
+		<Signal name="spindle18drop" 	index="33" dir="OUT" desc="EL Valve decent of Spindle 18" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-01" />
+		<Signal name="spindle19drop" 	index="34" dir="OUT" desc="EL Valve decent of Spindle 19" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-02" />
+		<Signal name="spindle20drop" 	index="35" dir="OUT" desc="EL Valve decent of Spindle 20" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-03" />
+		<Signal name="spindle21drop" 	index="36" dir="OUT" desc="EL Valve decent of Spindle 21" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-04" />
+		<Signal name="spindle22drop" 	index="37" dir="OUT" desc="EL Valve decent of Spindle 22" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-05" />
+		<Signal name="spindle23drop" 	index="38" dir="OUT" desc="EL Valve decent of Spindle 23" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-06" />
+		<Signal name="spindle24drop" 	index="39" dir="OUT" desc="EL Valve decent of Spindle 24" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-07" />
+		<Signal name="spindle25drop" 	index="40" dir="OUT" desc="EL Valve decent of Spindle 25" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-08" />
+		<Signal name="spindle26drop" 	index="41" dir="OUT" desc="EL Valve decent of Spindle 26" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-09" />
+		<Signal name="spindle27drop" 	index="42" dir="OUT" desc="EL Valve decent of Spindle 27" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-10" />
+		<Signal name="spindle28drop" 	index="43" dir="OUT" desc="EL Valve decent of Spindle 28" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-11" />
+		<Signal name="spindle29drop" 	index="44" dir="OUT" desc="EL Valve decent of Spindle 29" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-12" />
+		<Signal name="spindle30drop" 	index="45" dir="OUT" desc="EL Valve decent of Spindle 30" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-13" />
+		<Signal name="spindle31drop" 	index="46" dir="OUT" desc="EL Valve decent of Spindle 31" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-14" />
+		<Signal name="spindle32drop" 	index="47" dir="OUT" desc="EL Valve decent of Spindle 32" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-15" />
+		<Signal name="spindle33drop" 	index="48" dir="OUT" desc="EL Valve decent of Spindle 33" 					mesaOUT="hm2_5i25.0.7i71.1.1.output-16" />
+		<Signal name="spindle1and2drop" 		index="49" dir="OUT" desc="EL Valve decent of Spindle 33" 			mesaOUT="hm2_5i25.0.7i71.1.1.output-17" />
+		<Signal name="spindle3and4drop" 		index="50" dir="OUT" desc="EL Valve decent of Spindle 33" 			mesaOUT="hm2_5i25.0.7i71.1.1.output-18" />
+		<Signal name="spindle5and6drop" 		index="51" dir="OUT" desc="EL Valve decent of Spindle 33" 			mesaOUT="hm2_5i25.0.7i71.1.1.output-19" />
+		<Signal name="spindle7and8drop" 		index="52" dir="OUT" desc="EL Valve decent of Spindle 33" 			mesaOUT="hm2_5i25.0.7i71.1.1.output-20" />
+		<Signal name="spindle9and10drop" 	index="53" dir="OUT" desc="EL Valve decent of Spindle 33" 			mesaOUT="hm2_5i25.0.7i71.1.1.output-21" />
+	</Signals>
+	<SpecialButtons> <!-- This is normally associated with an external control box with buttons to activate a few things that the code must also activate -->
+		<!--Spindle buttons ... implemented as a series of toggles (baseName, Toggle, Motor-1, Motor-2) -->
+		<Toggle baseName="Spindle1" debounce="0.125" mesaIN="hm2_5i25.0.7i71.1.1.input-00" mesaOUT1="hm2_5i25.0.7i71.1.1.output-00" mesaOUT2="hm2_5i25.0.7i71.1.1.output-01" />
+		<Toggle baseName="Spindle2" debounce="0.125" mesaIN="hm2_5i25.0.7i71.1.1.input-01" mesaOUT1="hm2_5i25.0.7i71.1.1.output-02" mesaOUT2="hm2_5i25.0.7i71.1.1.output-03" />
+		<Toggle baseName="Spindle3" debounce="0.125" mesaIN="hm2_5i25.0.7i71.1.1.input-02" mesaOUT1="hm2_5i25.0.7i71.1.1.output-04" mesaOUT2="hm2_5i25.0.7i71.1.1.output-05" />
+		<!-- Cover Signals with external buttons implemented as or2 -->
+		<OR2 name="opencover" 			index="00" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-16" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-38" />
+		<OR2 name="closecover" 			index="01" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-17" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-39" />
+		<!-- Spindle drop Signals with external buttons implemented as or2 -->
+		<OR2 name="spindleAdrop" 		index="02" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-23" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-00" />
+		<OR2 name="spindleBdrop" 		index="03" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-25" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-01" />
+		<OR2 name="spindleCdrop" 		index="04" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-27" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-02" />
+		<!-- Spindle rise Signals with external buttons implemented as or2 -->
+		<OR2 name="spindleArise" 		index="05" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-24" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-04" />
+		<OR2 name="spindleBrise" 		index="06" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-26" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-05" />
+		<OR2 name="spindleCrise" 		index="07" dir="OUT" mesaIN="hm2_5i25.0.7i84.1.3.input-28" 	mesaOUT="hm2_5i25.0.7i71.1.2.output-06" />
+		<!-- Spindle A release and lock Signals with external buttons implemented as or2 -->
+		<OR2 name="spindleArelease" 	index="08" dir="OUT" mesaIN="classicladder.0.out-11" 			mesaOUT="hm2_5i25.0.7i71.1.2.output-19" />
+		<OR2 name="spindleAlock" 		index="09" dir="OUT" mesaIN="classicladder.0.out-14" 			mesaOUT="hm2_5i25.0.7i71.1.2.output-20" />
+	</SpecialButtons>
+	<SpecialTools> <!-- drills are numbered from 1 to 33, sideDrills are numbered from 1 to 9, only odd numbers (they come in pairs) -->
+		<ToolSeries id="701">
+			<Drill id="420"/>
+			<Drill id="421"/>
+		</ToolSeries>
+		<ToolSeries id="702">
+			<Drill id="420"/>
+			<Drill id="421"/>
+			<Drill id="422"/>
+		</ToolSeries>
+		<ToolSeries id="703">
+			<Drill id="420"/>
+			<Drill id="421"/>
+			<Drill id="422"/>
+			<Drill id="423"/>
+		</ToolSeries>
+		<ToolSeries id="704">
+			<Drill id="420"/>
+			<Drill id="421"/>
+			<Drill id="422"/>
+			<Drill id="423"/>
+			<Drill id="424"/>
+		</ToolSeries>
+		<ToolSeries id="705">
+			<Drill id="425"/>
+			<Drill id="426"/>
+		</ToolSeries>
+		<ToolSeries id="706">
+			<Drill id="425"/>
+			<Drill id="426"/>
+			<Drill id="427"/>
+		</ToolSeries>
+		<ToolSeries id="707">
+			<Drill id="425"/>
+			<Drill id="426"/>
+			<Drill id="427"/>
+			<Drill id="428"/>
+		</ToolSeries>
+		<ToolSeries id="708">
+			<Drill id="425"/>
+			<Drill id="426"/>
+			<Drill id="427"/>
+			<Drill id="428"/>
+			<Drill id="429"/>
+		</ToolSeries>
+		<ToolSeries id="709">
+			<Drill id="401"/>
+			<Drill id="409"/>
+			<SideDrill id="501"/>
+			<SideDrill id="503"/>
+		</ToolSeries>
+	</SpecialTools>
+</LinuxCNC>
