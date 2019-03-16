@@ -10,7 +10,7 @@ from util import lineno
 #-----------------------------------------------------------------------------------
 throw_exceptions = 1 # raises InterpreterException if execute() or read() fail
 #-----------------------------------------------------------------------------------
-from stdglue import change_prolog, change_epilog
+#from stdglue import change_prolog, change_epilog
 import xmlBiesse
 import sys
 
@@ -40,7 +40,8 @@ def M6_Remap_BiesseRover346(self, **words):
     #else:
     #    DoYield()
 
-
+    change_prolog1(self, **words)
+	
     try:
         #--------------------------------------------------------------------
         #   Get the xmlfile path from the ini file ... or hardcode here
@@ -48,6 +49,10 @@ def M6_Remap_BiesseRover346(self, **words):
         # [XML]
         # FILE=/home/bob/linuxcnc/configs/python/BiesseRover346.xml
         #--------------------------------------------------------------------
+		
+		
+        
+		
         xmlfile = "/home/bob/linuxcnc/configs/python/BiesseRover346.xml"
         #---------------------------------------------------------------------
         #   XML - Objects to fetch needed infos ...
@@ -61,7 +66,9 @@ def M6_Remap_BiesseRover346(self, **words):
         self.HIGH = 1
 		
         StopSpindleNow(self)
-        
+        #--------------------------------------
+		#Set tool-prepared for iocontrol
+        #set_tool_prepared(self, **words) 		
         # -------------------------------------
         # test if spindle has really stopped
         self.stat.poll()
@@ -98,13 +105,20 @@ def M6_Remap_BiesseRover346(self, **words):
         # now go according to selected_tool given by linuxcnc for the Txxx M6 ngc command
         #---------------------------------------------------------------------------------
         selectedtool = int(self.params["selected_tool"])
+        self.selected_tool = int(self.params["selected_tool"])
         print("Selected Tool : %d" % selectedtool)
         if selectedtool > 700:                                  # 701 to ... any combinations of drills and side drills
             DropTools(self, selectedtool)
+            self.current_tool = selectedtool
+            self.current_pocket = selectedtool
         elif (selectedtool > 500 and selectedtool < 510):       # 5 pairs of side drills (1,3,5,7,9)
             DropSideDrill(self, selectedtool - 500)
+            self.current_tool = selectedtool
+            self.current_pocket = selectedtool
         elif (selectedtool > 400 and selectedtool < 434):       # 33 drills (1-33)
             DropDrill(self, selectedtool - 400)
+            self.current_tool = selectedtool
+            self.current_pocket = selectedtool
         else:
             if selectedtool == 21:
                 if SpindleHasTool(self, "C"):
@@ -133,10 +147,10 @@ def M6_Remap_BiesseRover346(self, **words):
 
                 # now time to see if already in spindle
                 freePocket = FindFreePocket(self)
+                self.current_pocket = freePocket
                 print("freePocket = %s" % freePocket)
                 currenttool = int(self.params["tool_in_spindle"])
-                print("Current tool in spindle = %s" % currenttool)
-                print(currenttool)
+                print("tool in spindle = %s" % currenttool)
                 if freePocket == -1:
                     # what is in spindle 1 ? check if spindle has tool
                     if SpindleHasTool(self, "A"): # we have a problem
@@ -152,13 +166,20 @@ def M6_Remap_BiesseRover346(self, **words):
                         if selectedtool == 1:       #Pickup Tool 1
                             PickUpTool1(self)                            
                             CloseCasket(self)
+#                            self.current_tool = 1
                         elif selectedtool == 2:     #Pickup Tool 2
                             PickUpTool2(self)
                             #SetG43Tool2(self)
                             CloseCasket(self)
+#                            self.current_tool = 2
                         elif selectedtool == 3:     #Pickup Tool 3
                             PickUpTool3(self)
                             CloseCasket(self)
+#                            self.current_tool = 3
+							
+                        self.current_tool = selectedtool
+                        self.current_pocket = selectedtool
+						
                         return INTERP_OK    
                 else:
                     print("There is a free pocket")
@@ -176,6 +197,8 @@ def M6_Remap_BiesseRover346(self, **words):
                     if freePocket == selectedtool:
                         DropSpindleA(self)
                         print("Spindle A already has the right tool")
+                        self.current_tool = selectedtool
+                        self.current_pocket = selectedtool
                         return INTERP_OK
                     #------------------------------------
                     # DROP current tool in free pocket
@@ -190,6 +213,8 @@ def M6_Remap_BiesseRover346(self, **words):
                             PickUpTool3(self)
                         CloseCasket(self)
                         DropSpindleA(self)
+                        self.current_tool = selectedtool
+                        self.current_pocket = selectedtool
                         return INTERP_OK
                         
                     elif freePocket == 2:
@@ -201,6 +226,8 @@ def M6_Remap_BiesseRover346(self, **words):
                             PickUpTool3(self)
                         CloseCasket(self)
                         DropSpindleA(self)
+                        self.current_tool = selectedtool
+                        self.current_pocket = selectedtool
                         return INTERP_OK
                         
                     elif freePocket == 3:
@@ -212,6 +239,8 @@ def M6_Remap_BiesseRover346(self, **words):
                             PickUpTool1(self)
                         CloseCasket(self)
                         DropSpindleA(self)
+                        self.current_tool = selectedtool
+                        self.current_pocket = selectedtool
                         return INTERP_OK
                    
             
@@ -227,9 +256,9 @@ def M6_Remap_BiesseRover346(self, **words):
     #-----------------------------------------
     # We have errors ! catch and return error
     #-----------------------------------------
-    except InterpreterException,e:
-        msg = "BOB look at this error : %d: '%s' - %s" % (e.line_number,e.line_text, e.error_message)
-        self.set_errormsg(msg) # replace builtin error message
+#    except InterpreterException,e:
+#        msg = "BOB look at this error : %d: '%s' - %s" % (e.line_number,e.line_text, e.error_message)
+#        self.set_errormsg(msg) # replace builtin error message
         print("%s" % msg)
         return ReturnERROR()
 
@@ -245,20 +274,122 @@ def M6_Remap_BiesseRover346(self, **words):
     except:
         print "Unexpected error:", sys.exc_info()[0]
         raise
-    
+   
     finally:
-        change_epilog1(self, **words)
+        epilog1(self, **words)
+ 
+    
+        print 'Finally, have a nice GD Bobish day!'
+        print("Current pocket = %s" % self.current_pocket)
+        print("Selected pocket = %s" % self.selected_pocket)
+        print("Param.Selected pocket = %s" % int(self.params["selected_pocket"]))
+        print("Current tool in spindle = %s" % self.current_tool)
+        print("Selected tool = %s" % self.selected_tool)
         
-        print 'Finally, have a nice Bobish day!'
+        self.return_value = self.selected_tool
     #-----------------------
     # all fine, return ok !
     #-----------------------
-    #SetToolOffsets(self)
+    
+#        emccanon.CHANGE_TOOL(self.selected_pocket)
+#            # cause a sync()
+#        self.tool_change_flag = True
+#        self.set_tool_parameters()
+        print 'Final!'
+        print 'calling epilog'
+        print("Self return value = %s" % self.return_value)
+        print 'return from epilog journey'
+        print 'exiting remap'
+        print("pass return value")
+        self.selected_pocket =  int(self.params["selected_pocket"])
+        print("before emccannon CHANGE TOOL")
+        #emccanon.CHANGE_TOOL(self.selected_pocket)
+        print("emccannon CHANGE TOOL sent")
+        self.current_pocket = self.selected_pocket
+        #self.selected_pocket = -1
+        #self.selected_tool = -1
+        # cause a sync()
+        print("Lets Sync this Bitch, NOW")
+        self.set_tool_parameters()
+        self.toolchange_flag = True
+        print 'Toolchange flag set to true'
+        #yield INTERP_EXECUTE_FINISH 
+        print 'Leaving main loop, teleporting to epilog'
+        change_epilog1(self, **words)
     return INTERP_OK
     #ReturnOK()
 
 #----------------------------------------------------------
 #----------------------------------------------------------
+def change_prolog1(self, **words):
+    try:
+        if self.selected_pocket < 0:
+            return "M6: no tool prepared"
+
+        if self.cutter_comp_side:
+            return "Cannot change tools with cutter radius compensation on"
+
+        self.params["tool_in_spindle"] = self.current_tool
+        self.params["selected_tool"] = self.selected_tool
+        self.params["current_pocket"] = self.current_pocket
+        self.params["selected_pocket"] = self.selected_pocket
+        return INTERP_OK
+    except Exception, e:
+        return "M6/change_prolog: %s" % (e)
+
+def epilog1(self, **words):
+    try:
+            #print("Change epilog executing....")
+            if self.return_value > 0.0:
+                print("We are in he epilog. Hold on tight")
+                #self.selected_pocket =  int(self.params["selected_pocket"])
+                #print("before emccannon CHANGE TOOL")
+                #emccanon.CHANGE_TOOL(self.selected_pocket)
+                #print("emccannon CHANGE TOOL sent")
+                self.current_pocket = self.selected_pocket
+                #self.selected_pocket = -1
+                #self.selected_tool = -1
+                # cause a sync()
+                print("Lets Sync this Bitch, NOW")
+                #self.set_tool_parameters()
+                #self.toolchange_flag = True
+                yield INTERP_EXECUTE_FINISH
+            #else:
+                #self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
+                #return
+    except Exception, e:
+        self.set_errormsg("M6/change_epilog: %s" % (e))
+        return 
+
+#def set_tool_prepared(self)
+#    self.execute("M65 P55")		
+		
+#def change_epilog(self, **words):
+#    try:
+#        if self.return_value > 0.0:
+#            print 'Finally!'
+#            # commit change
+#            self.selected_pocket =  int(self.params["selected_pocket"])
+#            emccanon.CHANGE_TOOL(self.selected_pocket)
+#            self.current_pocket = self.selected_pocket
+#            #self.selected pocket = -1
+#            #self.selected_tool = -1			
+#            # cause a sync()
+#            #self.tool_change_flag = True
+#            self.set_tool_parameters()
+#            self.toolchange_flag = true
+#            yield INTERP_EXECUTE_FINISH
+#        else:
+#             self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
+#             yield INTERP_ERROR
+#     except Exception, e:
+#             self.set_errormsg("M6/change_epilog: %s" % (e))
+#     yield INTERP_ERROR
+
+
+
+
+
 #----------------------------------------------------------
 #-----Set me some tool offsets here!!!---------------------
 #----------------------------------------------------------
@@ -792,87 +923,6 @@ def FindFreePocket(self):
 #----------------------------------------------------------
 #---------------------------------------------------------------------------------------
 
-def change_epilog1(self, **words):
-    try:
-        print("Change epilog-1 executing....")
-        print(self.return_value)
-        if self.return_value == 0.0:
-            print("Lets commit the change on no return")
-            self.selected_pocket =  int(self.params["selected_pocket"])
-            print("Value=0.0")
-            emccanon.CHANGE_TOOL(self.selected_pocket)
-            self.current_pocket = self.selected_pocket
-            self.selected_pocket = -1
-            self.selected_tool = -1
-            # cause a sync()
-            print("Lets Sync this Bitch, NOW")
-            self.set_tool_parameters()
-            self.toolchange_flag = True
-            
-            return INTERP_EXECUTE_FINISH
-        else:
-            if self.return_value > 0.0:
-                print("Lets commit the change")
-                self.selected_pocket =  int(self.params["selected_pocket"])
-                print("Value > 0.0")
-                emccanon.CHANGE_TOOL(self.selected_pocket)
-                self.current_pocket = self.selected_pocket
-                self.selected_pocket = -1
-                self.selected_tool = -1
-                # cause a sync()
-                print("Lets Sync this Bitch, NOW")
-                self.set_tool_parameters()
-                self.toolchange_flag = True
-                return INTERP_EXECUTE_FINISH
-            else:
-                print("Error M6 Aborted")
-                self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
-                return INTERP_ERROR
-    except Exception, e:
-        self.set_errormsg("M6/change_epilog: %s" % (e))
-        return INTERP_ERROR
-
-#---------------------------------------------------------------------------------------
-def change_epilog2(self, **words):
-    try:
-        print("Change epilog-1 executing....")
-        print(self.return_value)
-        if not self.value_returned:
-            print("if not self.value returned")
-            r = self.blocks[self.remap_level].executing_remap
-            self.set_errormsg("the %s remap procedure %s did not return a value" % (r.name,r.remap_ngc if r.remap_ngc else r.remap_py))
-            return INTERP_ERROR
-        # this is relevant only when using iocontrol-v2.
-        if self.params[5600] > 0.0:
-            if self.params[5601] < 0.0:
-                print("self.parms 5601 less than 0.0")
-                self.set_errormsg("Toolchanger hard fault %d" % (int(self.params[5601])))
-                return INTERP_ERROR
-            print "change_epilog: Toolchanger soft fault %d" % int(self.params[5601])
-
-        if self.blocks[self.remap_level].builtin_used:
-            print("---------- M6 builtin recursion, nothing to do")
-            return INTERP_OK
-        else:
-            if self.return_value > 0.0:
-                print("Lets commit the change")
-                self.selected_pocket =  int(self.params["selected_pocket"])
-                emccanon.CHANGE_TOOL(self.selected_pocket)
-                self.current_pocket = self.selected_pocket
-                self.selected_pocket = -1
-                self.selected_tool = -1
-                # cause a sync()
-                print("Lets Sync this Bitch, NOW")
-                self.set_tool_parameters()
-                self.toolchange_flag = True
-                return INTERP_EXECUTE_FINISH
-            else:
-                print("Error M6 Aborted")
-                self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
-                return INTERP_ERROR
-    except Exception, e:
-        self.set_errormsg("M6/change_epilog: %s" % (e))
-        return INTERP_ERROR
 
 #---------------------------------------------------------------------------------------
 def DoYield():
