@@ -7,4 +7,6 @@ simply doesnt run. so we use REMAP=M6 modalgroup=6 python=M6_Remap_BiesseRover34
 in the ini.
 
 We created an xml class used to get common values from xml file re: delay iterations.
-We removed all yield except in epilog. We are trying to track down the interpreter issues.
+We removed all yield's and INTTERP_EXECUTE_FINISH.
+
+Make sure you import * from emccanon or else you wont get the commands and the sync's wont work.
