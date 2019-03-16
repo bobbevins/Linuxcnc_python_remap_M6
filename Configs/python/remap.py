@@ -5,7 +5,8 @@
 #-----------------------------------------------------------------------------------
 import linuxcnc
 from interpreter import *
-from emccanon import MESSAGE, SET_MOTION_OUTPUT_BIT, CLEAR_MOTION_OUTPUT_BIT,SET_AUX_OUTPUT_BIT,CLEAR_AUX_OUTPUT_BIT
+#from emccanon import MESSAGE, SET_MOTION_OUTPUT_BIT, CLEAR_MOTION_OUTPUT_BIT,SET_AUX_OUTPUT_BIT,CLEAR_AUX_OUTPUT_BIT
+import emccanon
 from util import lineno
 #-----------------------------------------------------------------------------------
 throw_exceptions = 1 # raises InterpreterException if execute() or read() fail
@@ -293,18 +294,29 @@ def M6_Remap_BiesseRover346(self, **words):
 #       
         print 'Final!'
         print("Self return value = %s" % self.return_value)
-		print 'calling epilog'
-        epilog(self, **words)
-		print 'Returned form epilog journey'
-		print("Current pocket = %s" % self.current_pocket)
+        print 'calling epilog'
+        #change_epilog(self, **words)
+        print 'Returned form epilog journey'
+        print("Current pocket = %s" % self.current_pocket)
         print("Selected pocket = %s" % self.selected_pocket)
         print("Param.Selected pocket = %s" % int(self.params["selected_pocket"]))
         print("Current tool in spindle = %s" % self.current_tool)
         print("Selected tool = %s" % self.selected_tool)
-		print 'exiting remap'
-		
+        self.selected_pocket =  int(self.params["selected_pocket"])
+        print("before emccannon CHANGE TOOL")
+        emccanon.CHANGE_TOOL(self.selected_pocket)
+        print("emccannon CHANGE TOOL sent")
+        self.current_pocket = self.selected_pocket
+        #self.selected_pocket = -1
+        #self.selected_tool = -1
+        # cause a sync()
+        print("Lets Sync this Bitch, NOW")
+        self.set_tool_parameters()
+        self.toolchange_flag = True
+        
+        
     return INTERP_OK
-    #ReturnOK()
+    #ReturnOK()sending tool
 
 #----------------------------------------------------------
 #----------------------------------------------------------
@@ -320,11 +332,12 @@ def change_prolog1(self, **words):
         self.params["selected_tool"] = self.selected_tool
         self.params["current_pocket"] = self.current_pocket
         self.params["selected_pocket"] = self.selected_pocket
+        
         return INTERP_OK
     except Exception, e:
         return "M6/change_prolog: %s" % (e)
 
-def change_epilog1(self, **words):
+def change_epilog(self, **words):
     try:
             #print("Change epilog executing....")
             if self.return_value > 0.0:
