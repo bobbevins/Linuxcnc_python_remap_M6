@@ -276,10 +276,10 @@ def M6_Remap_BiesseRover346(self, **words):
         raise
    
     finally:
-        epilog1(self, **words)
+        #change_epilog(self, **words)
  
     
-        print 'Finally, have a nice GD Bobish day!'
+        print 'Hold on, off to epilog coming up!'
         print("Current pocket = %s" % self.current_pocket)
         print("Selected pocket = %s" % self.selected_pocket)
         print("Param.Selected pocket = %s" % int(self.params["selected_pocket"]))
@@ -290,32 +290,19 @@ def M6_Remap_BiesseRover346(self, **words):
     #-----------------------
     # all fine, return ok !
     #-----------------------
-    
-#        emccanon.CHANGE_TOOL(self.selected_pocket)
-#            # cause a sync()
-#        self.tool_change_flag = True
-#        self.set_tool_parameters()
+#       
         print 'Final!'
-        print 'calling epilog'
         print("Self return value = %s" % self.return_value)
-        print 'return from epilog journey'
-        print 'exiting remap'
-        print("pass return value")
-        self.selected_pocket =  int(self.params["selected_pocket"])
-        print("before emccannon CHANGE TOOL")
-        #emccanon.CHANGE_TOOL(self.selected_pocket)
-        print("emccannon CHANGE TOOL sent")
-        self.current_pocket = self.selected_pocket
-        #self.selected_pocket = -1
-        #self.selected_tool = -1
-        # cause a sync()
-        print("Lets Sync this Bitch, NOW")
-        self.set_tool_parameters()
-        self.toolchange_flag = True
-        print 'Toolchange flag set to true'
-        #yield INTERP_EXECUTE_FINISH 
-        print 'Leaving main loop, teleporting to epilog'
-        change_epilog1(self, **words)
+		print 'calling epilog'
+        epilog(self, **words)
+		print 'Returned form epilog journey'
+		print("Current pocket = %s" % self.current_pocket)
+        print("Selected pocket = %s" % self.selected_pocket)
+        print("Param.Selected pocket = %s" % int(self.params["selected_pocket"]))
+        print("Current tool in spindle = %s" % self.current_tool)
+        print("Selected tool = %s" % self.selected_tool)
+		print 'exiting remap'
+		
     return INTERP_OK
     #ReturnOK()
 
@@ -337,26 +324,26 @@ def change_prolog1(self, **words):
     except Exception, e:
         return "M6/change_prolog: %s" % (e)
 
-def epilog1(self, **words):
+def change_epilog1(self, **words):
     try:
             #print("Change epilog executing....")
             if self.return_value > 0.0:
-                print("We are in he epilog. Hold on tight")
-                #self.selected_pocket =  int(self.params["selected_pocket"])
-                #print("before emccannon CHANGE TOOL")
-                #emccanon.CHANGE_TOOL(self.selected_pocket)
-                #print("emccannon CHANGE TOOL sent")
+                print("pass return value")
+                self.selected_pocket =  int(self.params["selected_pocket"])
+                print("before emccannon CHANGE TOOL")
+                emccanon.CHANGE_TOOL(self.selected_pocket)
+                print("emccannon CHANGE TOOL sent")
                 self.current_pocket = self.selected_pocket
-                #self.selected_pocket = -1
-                #self.selected_tool = -1
+                self.selected_pocket = -1
+                self.selected_tool = -1
                 # cause a sync()
                 print("Lets Sync this Bitch, NOW")
-                #self.set_tool_parameters()
-                #self.toolchange_flag = True
+                self.set_tool_parameters()
+                self.toolchange_flag = True
                 yield INTERP_EXECUTE_FINISH
-            #else:
-                #self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
-                #return
+            else:
+                self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
+                return
     except Exception, e:
         self.set_errormsg("M6/change_epilog: %s" % (e))
         return 
