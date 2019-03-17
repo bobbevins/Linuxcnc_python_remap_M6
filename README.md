@@ -1,4 +1,4 @@
-<H2>Linuxcnc Pure Python M6 Remap Biesse ROVER 346</H2>
+<H2>Linuxcnc Pure Python M6 Remap on a Biesse ROVER 346</H2>
 
 This remap is 100% working and running in a production environment.
 It has one ISO spindle 9KW, slots for 3 and the code allows for three spindles but not tested for three.
