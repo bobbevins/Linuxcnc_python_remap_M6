@@ -5,13 +5,11 @@
 #-----------------------------------------------------------------------------------
 import linuxcnc
 from interpreter import *
-#from emccanon import MESSAGE, SET_MOTION_OUTPUT_BIT, CLEAR_MOTION_OUTPUT_BIT,SET_AUX_OUTPUT_BIT,CLEAR_AUX_OUTPUT_BIT
 import emccanon
 from util import lineno
 #-----------------------------------------------------------------------------------
 throw_exceptions = 1 # raises InterpreterException if execute() or read() fail
 #-----------------------------------------------------------------------------------
-#from stdglue import change_prolog, change_epilog
 import xmlBiesse
 import sys
 
@@ -20,15 +18,10 @@ import sys
 #------------------------------------------------------------------------------------------------------
 # MAIN FUNCTION : change_remap 
 #
-# from REMAP=M6 modalgroup=6 prolog=change_prolog python=M6_Remap_BiesseRover346  epilog=change_epilog
-#       - change_prolog is in stdglue.py, change_epilog is in remap.py.
+#      REMAP=M6 modalgroup=6  python=M6_Remap_BiesseRover346  
+#       - Do not use stdglue.py, in pure python remap
 #------------------------------------------------------------------------------------------------------
-# when done, change the world coordinate system to reflect the new offsets for the selected spindle
-#   (G10 L20 X0 Y0 Z0) ...
-#
-#-------------------------------------------------------------------------------------------------------------------
-#   REMAP=M6 modalgroup=6 prolog=change_prolog   python=M6_Remap_BiesseRover346  epilog=change_epilog
-#-------------------------------------------------------------------------------------------------------------------
+
 def queuebuster(self, **words):
     yield INTERP_EXECUTE_FINISH
     
@@ -58,7 +51,7 @@ def M6_Remap_BiesseRover346(self, **words):
         #---------------------------------------------------------------------
         #   XML - Objects to fetch needed infos ...
         #---------------------------------------------------------------------
-        #queuebuster(self, **words)
+        
         self.x = xmlBiesse.xmlBiesse(xmlfile) # the xml interface
         # set some self values 
         self.feedSpeed  = self.x.getFeedSpeed()
@@ -67,11 +60,10 @@ def M6_Remap_BiesseRover346(self, **words):
         self.HIGH = 1
 		
         StopSpindleNow(self)
-        #--------------------------------------
-		#Set tool-prepared for iocontrol
-        #set_tool_prepared(self, **words) 		
+        
         # -------------------------------------
         # test if spindle has really stopped
+        #--------------------------------------
         self.stat.poll()
         index = self.x.getSignalInfos("spindleHasStopped")
         isSpindleStopped = int(self.stat.din[index])
@@ -125,7 +117,7 @@ def M6_Remap_BiesseRover346(self, **words):
                 if SpindleHasTool(self, "C"):
                     DropSpindleC(self)
                     EnergiseSpindle(self, "C")
-                    #return ReturnOK()
+                    #This is if you have three ISO spindles. This is spindle#3 or C
                     return INTERP_OK
                 else:
                     msg = "Spindle C has no tool"
@@ -136,7 +128,7 @@ def M6_Remap_BiesseRover346(self, **words):
                     DropSpindleB(self)
                     EnergiseSpindle(self, "B")
                     SetG43Tool20(self)
-                    #return ReturnOK()
+                    #This is if you have three ISO spindles. This is spindle#2 or B
                     return INTERP_OK
                 else:
                     msg = "Spindle B has no tool"
@@ -257,9 +249,9 @@ def M6_Remap_BiesseRover346(self, **words):
     #-----------------------------------------
     # We have errors ! catch and return error
     #-----------------------------------------
-#    except InterpreterException,e:
-#        msg = "BOB look at this error : %d: '%s' - %s" % (e.line_number,e.line_text, e.error_message)
-#        self.set_errormsg(msg) # replace builtin error message
+    except InterpreterException,e:
+        msg = "BOB look at this error : %d: '%s' - %s" % (e.line_number,e.line_text, e.error_message)
+        self.set_errormsg(msg) # replace builtin error message
         print("%s" % msg)
         return ReturnERROR()
 
@@ -277,7 +269,7 @@ def M6_Remap_BiesseRover346(self, **words):
         raise
    
     finally:
-        #change_epilog(self, **words)
+        
  
     
         print 'Hold on, off to epilog coming up!'
@@ -291,11 +283,10 @@ def M6_Remap_BiesseRover346(self, **words):
     #-----------------------
     # all fine, return ok !
     #-----------------------
-#       
+        # This is the change_epilog within remap body     
         print 'Final!'
         print("Self return value = %s" % self.return_value)
         print 'calling epilog'
-        #change_epilog(self, **words)
         print 'Returned form epilog journey'
         print("Current pocket = %s" % self.current_pocket)
         print("Selected pocket = %s" % self.selected_pocket)
@@ -316,7 +307,7 @@ def M6_Remap_BiesseRover346(self, **words):
         
         
     return INTERP_OK
-    #ReturnOK()sending tool
+    
 
 #----------------------------------------------------------
 #----------------------------------------------------------
@@ -361,30 +352,7 @@ def change_epilog(self, **words):
         self.set_errormsg("M6/change_epilog: %s" % (e))
         return 
 
-#def set_tool_prepared(self)
-#    self.execute("M65 P55")		
-		
-#def change_epilog(self, **words):
-#    try:
-#        if self.return_value > 0.0:
-#            print 'Finally!'
-#            # commit change
-#            self.selected_pocket =  int(self.params["selected_pocket"])
-#            emccanon.CHANGE_TOOL(self.selected_pocket)
-#            self.current_pocket = self.selected_pocket
-#            #self.selected pocket = -1
-#            #self.selected_tool = -1			
-#            # cause a sync()
-#            #self.tool_change_flag = True
-#            self.set_tool_parameters()
-#            self.toolchange_flag = true
-#            yield INTERP_EXECUTE_FINISH
-#        else:
-#             self.set_errormsg("M6 aborted (return code %.1f)" % (self.return_value))
-#             yield INTERP_ERROR
-#     except Exception, e:
-#             self.set_errormsg("M6/change_epilog: %s" % (e))
-#     yield INTERP_ERROR
+
 
 
 
