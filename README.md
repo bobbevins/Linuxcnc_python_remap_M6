@@ -2,7 +2,7 @@ Linuxcnc Pure Python M6 Remap
 
 This remap is 100% working and running in a production environment.
 It has one ISO spindle 9KW, slots for 3 and the code allows for three spindles but not tested for three.
-  Spindle 1 changes tool only. Tool 20 goes in spindle 2 or (B), tool 21 goes in spindle 3 (C)
+  Spindle 1 changes tool only. Tool 20 goes in spindle 2(B), tool 21 goes in spindle 3(C)
 There are 33 drills and 10 horizontal drills mounted on 5 horizontal drill blocks
     tools 401-433 are individual drills
     tools 501,503.505,507,509 are paired horizontal drills
