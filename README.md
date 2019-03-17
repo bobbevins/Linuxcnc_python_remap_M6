@@ -15,4 +15,9 @@ in the xml. This class consists of the remap XML set within the remap, util.py a
     
 The python plugin was installed. I dont know if it is required but if you do install it, you need to have
 the stdglue.py in the remap directory. Do not put the prolog or epilog in the remap statement in the ini.
-remap statement: 
+
+ini remap statement: REMAP=M6 modalgroup=6 python=M6_Remap_BiesseRover346 
+
+The 33 drill motor is energized in the remap and shutoff in the gcode(remapped M200) if a drill was used as last tool in the program. 
+ The drill motor gets shutoff also within the remap near the beginning with "de-energize 
+
