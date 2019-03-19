@@ -371,6 +371,7 @@ def DropSpindleA(self):
     self.execute("M64 P2")                      #Drop Spindle
     self.execute("G4 P1")                       #wait to release pulse on lock spindle
     self.execute("M65 P2")                      #Release drop SP relay, only needs pulse
+    self.execute("G4 P1")
     self.execute("M66 P9 L3 Q5")  
     print("drop Spindle A Done")              #Wait for Spindle to drop
     
