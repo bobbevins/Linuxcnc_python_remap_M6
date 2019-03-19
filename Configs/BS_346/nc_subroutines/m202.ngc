@@ -1,0 +1,7 @@
+;Raise Spindle A
+o<m202> sub
+M64 P5
+G4 P.5
+M65 P5
+o<m202> endsub
+M2

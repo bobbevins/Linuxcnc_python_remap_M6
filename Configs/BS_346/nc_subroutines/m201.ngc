@@ -1,0 +1,7 @@
+;Drop Spindle A
+o<m201> sub
+M64 P2
+G4 p.5
+M65 P2
+o<m201> endsub
+M2
