@@ -104,14 +104,17 @@ def M6_Remap_BiesseRover346(self, **words):
             DropTools(self, selectedtool)
             self.current_tool = selectedtool
             self.current_pocket = selectedtool
+            self.execute("G43 H%d" % selectedtool)
         elif (selectedtool > 500 and selectedtool < 510):       # 5 pairs of side drills (1,3,5,7,9)
             DropSideDrill(self, selectedtool - 500)
             self.current_tool = selectedtool
             self.current_pocket = selectedtool
+            self.execute("G43 H%d" % selectedtool)
         elif (selectedtool > 400 and selectedtool < 434):       # 33 drills (1-33)
             DropDrill(self, selectedtool - 400)
             self.current_tool = selectedtool
             self.current_pocket = selectedtool
+            self.execute("G43 H%d" % selectedtool)
         else:
             if selectedtool == 21:
                 if SpindleHasTool(self, "C"):
@@ -172,6 +175,7 @@ def M6_Remap_BiesseRover346(self, **words):
 							
                         self.current_tool = selectedtool
                         self.current_pocket = selectedtool
+                        self.execute("G43 H%d" % selectedtool)
 						
                         return INTERP_OK    
                 else:
@@ -208,6 +212,7 @@ def M6_Remap_BiesseRover346(self, **words):
                         DropSpindleA(self)
                         self.current_tool = selectedtool
                         self.current_pocket = selectedtool
+                        self.execute("G43 H%d" % selectedtool)
                         return INTERP_OK
                         
                     elif freePocket == 2:
@@ -221,6 +226,7 @@ def M6_Remap_BiesseRover346(self, **words):
                         DropSpindleA(self)
                         self.current_tool = selectedtool
                         self.current_pocket = selectedtool
+                        self.execute("G43 H%d" % selectedtool)
                         return INTERP_OK
                         
                     elif freePocket == 3:
@@ -234,6 +240,7 @@ def M6_Remap_BiesseRover346(self, **words):
                         DropSpindleA(self)
                         self.current_tool = selectedtool
                         self.current_pocket = selectedtool
+                        self.execute("G43 H%d" % selectedtool)
                         return INTERP_OK
                    
             
